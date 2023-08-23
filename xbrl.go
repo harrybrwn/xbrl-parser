@@ -16,8 +16,11 @@ type NotImplemented []*struct{}
 // You can use this struct directly, but XBRL is structured in a more convenient way.
 // See the comment on XBRL for more info.
 type RawXBRL struct {
-	Contexts []Context `xml:"context"`
-	Units    []Unit    `xml:"unit"`
+	Lang         string     `xml:"lang,attr"`
+	XMLNameSpace string     `xml:"xmlns,attr"`
+	Attrs        []xml.Attr `xml:",any,attr"`
+	Contexts     []Context  `xml:"context"`
+	Units        []Unit     `xml:"unit"`
 
 	Facts []Fact `xml:",any"`
 
@@ -28,6 +31,9 @@ type RawXBRL struct {
 	RoleRef      NotImplemented `xml:"roleRef"`
 	ArcRoleRef   NotImplemented `xml:"arcroleRef"`
 	FootnoteLink NotImplemented `xml:"footnoteLink"`
+}
+
+type RawIXBRL struct {
 }
 
 // XBRL contains maps for contexts and units so they can be accessed easier when looping through facts.

@@ -43,6 +43,15 @@ type Segment struct {
 	XMLName    xml.Name
 	Attributes []xml.Attr `xml:",any,attr"`
 	Value      string     `xml:",chardata"`
+	Children   []XMLAny   `xml:",any"`
+}
+
+// XMLAny represents a generic xml tree.
+type XMLAny struct {
+	XMLName    xml.Name
+	Attributes []xml.Attr `xml:",any,attr"`
+	Children   []XMLAny   `xml:",any"`
+	Value      *string    `xml:",chardata"`
 }
 
 // UnmarshalXML implements xml.Unmarshaller for Segments.
