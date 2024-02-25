@@ -16,17 +16,20 @@ type NotImplemented []*struct{}
 // You can use this struct directly, but XBRL is structured in a more convenient way.
 // See the comment on XBRL for more info.
 type RawXBRL struct {
-	Lang         string     `xml:"lang,attr"`
-	XMLNameSpace string     `xml:"xmlns,attr"`
-	Attrs        []xml.Attr `xml:",any,attr"`
-	Contexts     []Context  `xml:"context"`
-	Units        []Unit     `xml:"unit"`
+	XMLName xml.Name
+	Lang    string `xml:"lang,attr"`
+	// Attrs is a list of all the attributes. This is useful for collecting all
+	// the namespaces used in this xml document.
+	Attrs []xml.Attr `xml:",any,attr"`
 
-	Facts []Fact `xml:",any"`
+	Contexts []Context `xml:"context"`
+	Units    []Unit    `xml:"unit"`
+
+	Facts     []Fact    `xml:",any"`
+	SchemaRef SchemaRef `xml:"schemaRef"`
 
 	// The fields below are not properly implemented, but need to be here so they aren't lumped into the `Facts` slice.
 
-	SchemaRef    NotImplemented `xml:"schemaRef"`
 	LinkbaseRef  NotImplemented `xml:"linkbaseRef"`
 	RoleRef      NotImplemented `xml:"roleRef"`
 	ArcRoleRef   NotImplemented `xml:"arcroleRef"`
@@ -103,4 +106,10 @@ func (x XBRL) Validate() error {
 // IsValid validates the Facts in this struct and returns true if no error was found.
 func (x XBRL) IsValid() bool {
 	return x.Validate() == nil
+}
+
+type SchemaRef struct {
+	XMLName xml.Name
+	Href    xml.Attr `xml:"href,attr"`
+	Type    xml.Attr `xml:"type,attr"`
 }
